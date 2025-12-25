@@ -34,4 +34,8 @@ public class PrefixRepository {
             session.delete(prefix);
         }
     }
+
+    public void deleteAll() {
+        getCurrentSession().createQuery("delete from prefix").executeUpdate();
+    }
 }

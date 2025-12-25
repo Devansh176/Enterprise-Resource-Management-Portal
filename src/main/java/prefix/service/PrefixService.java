@@ -33,4 +33,8 @@ public class PrefixService {
     public void deletePrefixById(int id) {
         prefixRepository.deleteById(id);
     }
+
+    public void deleteAll() {
+        prefixRepository.deleteAll();
+    }
 }

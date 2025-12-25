@@ -23,4 +23,8 @@ public class Controller {
     public void deletePrefix(int id) {
         prefixService.deletePrefixById(id);
     }
+
+    public void deleteAll() {
+        prefixService.deleteAll();
+    }
 }

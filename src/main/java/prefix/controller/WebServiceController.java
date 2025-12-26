@@ -1,10 +1,7 @@
 package prefix.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import prefix.entity.Prefix;
 import prefix.service.PrefixService;
 
@@ -17,10 +14,30 @@ public class WebServiceController {
     @Autowired
     private PrefixService prefixService;
 
-//    @PostMapping("/")
+    @PostMapping("/prefixes")
+    public String createPrefix(@RequestParam("title") String title, @RequestParam("gender") String gender, @RequestParam("prefix") String prefixName) {
+        try {
+            prefixService.createPrefix(title, gender, prefixName);
+            return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";
+        }
+        catch (Exception e) {
+            return "{ \"success\": false, \"message\": \"Error: " + e.getMessage() + "\" }";
+        }
+    }
 
     @GetMapping("/prefixes")
     public List<Prefix> getPrefixesJson() {
         return prefixService.getAllPrefixes();
+    }
+
+    @DeleteMapping("/prefixes/{id}")
+    public String deletePrefix(@PathVariable("id") int id) {
+        try {
+            prefixService.deletePrefixById(id);
+            return "{ \"success\": true, \"message\": \"Record Deleted Successfully\" }";
+        }
+        catch (Exception e) {
+            return "{ \"success\": false, \"message\": \"Error: " + e.getMessage() + "\" }";
+        }
     }
 }

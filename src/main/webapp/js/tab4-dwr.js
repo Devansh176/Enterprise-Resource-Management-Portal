@@ -127,8 +127,79 @@ window.initTab4 = function() {
                         }
                     }]
                 }
-            ]
-        });
+            ],
+            tbar: [
+                {
+                    xtype: 'textfield',
+                    emptyText: 'Search Title',
+                    width: 150,
+                    enableKeyEvents: true,
+                    listeners: {
+                        keyup: function() {
+                            filterGrid();
+                        }
+                    }
+                },
+                {
+                            xtype: 'textfield',
+                            emptyText: 'Search Gender...',
+                            width: 150,
+                            enableKeyEvents: true,
+                            listeners: {
+                                keyup: function() { filterGrid(); }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Search Prefix...',
+                            width: 150,
+                            enableKeyEvents: true,
+                            listeners: {
+                                keyup: function() { filterGrid(); }
+                            }
+                        },
+                        {
+                            text: 'Clear Filters',
+                            icon: 'https://cdn-icons-png.flaticon.com/16/1828/1828843.png',
+                            handler: function() {
+                                // Clear all text fields
+                                var toolbar = this.up('toolbar');
+                                toolbar.items.each(function(item) {
+                                    if (item.xtype === 'textfield') item.setValue('');
+                                });
+                                // Clear store filter
+                                prefixStore.clearFilter();
+                            }
+                        }
+                    ]
+                });
+
+                function filterGrid() {
+                    var toolbar = listGrid.down('toolbar');
+                    var titleVal = toolbar.items.getAt(0).getValue().toLowerCase();
+                    var genderVal = toolbar.items.getAt(1).getValue().toLowerCase();
+                    var prefixVal = toolbar.items.getAt(2).getValue().toLowerCase();
+
+                    prefixStore.clearFilter();
+
+                    prefixStore.filterBy(function(record) {
+                        var rTitle = record.get('title');
+                        var rGender = record.get('gender');
+                        var rPrefix = record.get('displayPrefix');
+
+                        // Convert to searchable strings
+                        var sTitle = (rTitle && rTitle.displayValue) ? rTitle.displayValue.toLowerCase() : '';
+                        var sGender = rGender ? rGender.toLowerCase() : '';
+                        var sPrefix = rPrefix ? rPrefix.toLowerCase() : '';
+
+                        // Check if the row matches ALL non-empty search fields
+                        var matchTitle = sTitle.indexOf(titleVal) > -1;
+                        var matchGender = sGender.indexOf(genderVal) > -1;
+                        var matchPrefix = sPrefix.indexOf(prefixVal) > -1;
+
+                        return matchTitle && matchGender && matchPrefix;
+                    });
+                }
 
         Ext.create('Ext.container.Container', {
             renderTo: 'tab4-container',

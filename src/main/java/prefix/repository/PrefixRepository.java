@@ -36,6 +36,6 @@ public class PrefixRepository {
     }
 
     public void deleteAll() {
-        getCurrentSession().createQuery("delete from prefix").executeUpdate();
+        getCurrentSession().createNativeQuery("TRUNCATE TABLE Prefix").executeUpdate();
     }
 }

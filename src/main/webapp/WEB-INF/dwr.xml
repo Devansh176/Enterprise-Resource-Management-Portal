@@ -13,5 +13,9 @@
             <param name="exclude" value="class, declaringClass"/>
         </convert>
         <convert converter="bean" match="prefix.entity.Prefix"/>
+
+        <convert converter="bean" match="prefix.entity.titleType.TitleType">
+            <param name="exclude" value="class, declaringClass"/>
+        </convert>
     </allow>
 </dwr>

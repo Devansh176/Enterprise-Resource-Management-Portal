@@ -6,7 +6,7 @@ window.initTab4 = function() {
 
     Ext.onReady(function() {
         var prefixStore = Ext.create('Ext.data.Store', {
-            fields: ['id', 'displayPrefix', 'gender'],
+            fields: ['id', 'title', 'gender', 'displayPrefix'],
             data: []
         });
 
@@ -30,9 +30,9 @@ window.initTab4 = function() {
             items: [
                 {
                     xtype: 'combo',
-                    name: 'displayPrefix',
-                    fieldLabel: 'Prefix',
-                    store: ['SO', 'HO', 'FO', 'DO', 'WO', 'MO'],
+                    name: 'title',
+                    fieldLabel: 'Title',
+                    store: ['MR', 'MRS', 'MS', 'MASTER', 'BABY_BOY', 'BABY_GIRL', 'MX', 'DR', 'PROF'],
                     editable: false,
                     emptyText: 'Select...'
                 },
@@ -45,6 +45,14 @@ window.initTab4 = function() {
                     emptyText: 'Select...'
                 },
                 {
+                    xtype: 'combo',
+                    name: 'displayPrefix',
+                    fieldLabel: 'Prefix',
+                    store: ['SO', 'HO', 'FO', 'DO', 'WO', 'MO'],
+                    editable: false,
+                    emptyText: 'Select...'
+                },
+                {
                     xtype: 'button',
                     text: 'Save',
                     iconCls: 'icon-save',
@@ -53,9 +61,13 @@ window.initTab4 = function() {
                         if(form.isValid()) {
                             var v = form.getValues();
 
-                            console.log("Sending to Java -> Prefix:", v.prefixName, " Gender:", v.gender);
+                            if (!v.displayPrefix || !v.gender || !v.title) {
+                                 Ext.Msg.alert('Error', 'Please select all fields');
+                                 return;
+                            }
 
-                            PrefixController.savePrefix(v.prefixName, v.gender, {
+                            console.log("Sending -> Title:", v.title, " Gender:", v.gender, " Prefix:", v.displayPrefix);
+                            PrefixController.savePrefix(v.title, v.gender, v.displayPrefix, {
                                 callback: function() {
                                     Ext.Msg.alert('Success', 'Record Saved!');
                                     form.reset();
@@ -72,7 +84,7 @@ window.initTab4 = function() {
                     xtype: 'button',
                     text: 'Delete All',
                     handler: function() {
-                        PrefixController.deleteAllPrefixes(function() {
+                        PrefixController.deleteAll(function() {
                             Ext.Msg.alert('Success', 'All records deleted');
                             window.loadPrefixData();
                         });
@@ -88,8 +100,16 @@ window.initTab4 = function() {
             margin: '10 0 0 0',
             columns: [
                 {text: 'ID', dataIndex: 'id', width: 50},
-                {text: 'Prefix', dataIndex: 'displayPrefix', flex: 1},
+                {
+                    text: 'Title',
+                    dataIndex: 'title',
+                    flex: 1,
+                    renderer: function(value) {
+                        return value ? value.displayValue : '';
+                    }
+                },
                 {text: 'Gender', dataIndex: 'gender', flex: 1},
+                {text: 'Prefix Of', dataIndex: 'displayPrefix', flex: 1},
                 {
                     text: 'Action',
                     xtype: 'actioncolumn',

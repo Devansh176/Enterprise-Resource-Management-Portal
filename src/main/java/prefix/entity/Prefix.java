@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import prefix.entity.gender.GenderType;
 import prefix.entity.prefixType.PrefixTypes;
+import prefix.entity.titleType.TitleType;
 
 import javax.persistence.*;
 
@@ -28,15 +29,23 @@ public class Prefix {
     @Enumerated(EnumType.STRING)
     private PrefixTypes prefix;
 
-    private String displayPrefix;
-
     // This fixed the error
     public String getDisplayPrefix() {
         if (prefix != null) {
-            displayPrefix = prefix.getDisplayValue();
+            return prefix.getDisplayValue();
         }
+        return "";
+    }
 
-        return displayPrefix;
+    @Column(name = "TITLE")
+    @Enumerated(EnumType.STRING)
+    private TitleType title;
+
+    public String getDisplayTitle() {
+        if(title != null) {
+            return title.getDisplayValue();
+        }
+        return "";
     }
 }
 

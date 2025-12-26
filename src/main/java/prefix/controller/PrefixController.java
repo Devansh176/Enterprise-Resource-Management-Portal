@@ -13,8 +13,8 @@ public class PrefixController {
     @Autowired
     private PrefixService prefixService;
 
-    public void savePrefix(String prefixName, String gender) {
-        prefixService.createPrefix(prefixName, gender);
+    public void savePrefix(String title, String gender, String prefixName) {
+        prefixService.createPrefix(title, gender, prefixName);
     }
 
     public List<Prefix> listPrefixes() {

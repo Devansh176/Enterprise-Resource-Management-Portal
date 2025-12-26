@@ -43,5 +43,5 @@ window.initTab6 = function() {
                 },
             ]
         })
-    })
+    });
 }

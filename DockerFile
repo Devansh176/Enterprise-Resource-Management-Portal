@@ -1,0 +1,71 @@
+# 1. Start with a Linux image that has Java 17
+FROM eclipse-temurin:17-jdk-jammy
+
+# 2. Install Node.js, Cron, and Chrome dependencies (for Puppeteer)
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    cron \
+    wget \
+    ca-certificates \
+    fonts-liberation \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libc6 \
+    libcairo2 \
+    libcups2 \
+    libdbus-1-3 \
+    libexpat1 \
+    libfontconfig1 \
+    libgbm1 \
+    libgcc1 \
+    libglib2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libstdc++6 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxext6 \
+    libxfixes3 \
+    libxi6 \
+    libxrandr2 \
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    lsb-release \
+    xdg-utils
+
+# 3. Install Node.js (Version 18)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# 4. Set the working directory
+WORKDIR /app
+
+# 5. Copy the project files into the container
+COPY . .
+
+# 6. Build the Java application
+RUN ./mvnw clean package -DskipTests
+
+# 7. Install Puppeteer dependencies
+WORKDIR /app/src/main/resources/puppeteer
+RUN npm install
+
+# 8. Setup the Cron Job
+WORKDIR /app
+RUN echo "* * * * * /bin/bash /app/cron-schedule/trigger_job.sh" > /etc/cron.d/my-cron
+RUN chmod 0644 /etc/cron.d/my-cron
+RUN crontab /etc/cron.d/my-cron
+RUN touch /var/log/cron.log
+
+# 9. Run Cron + Java
+CMD cron && java -jar target/*.jar

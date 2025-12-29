@@ -28,6 +28,10 @@ public class PrefixService {
         prefixRepository.save(prefix);
     }
 
+    public List<Prefix> searchTitle(String query) {
+        return prefixRepository.findByTitle(query);
+    }
+
     public List<Prefix> getAllPrefixes() {
         return prefixRepository.findAll();
     }

@@ -39,14 +39,15 @@ public class PrefixRepository {
         getCurrentSession().createNativeQuery("TRUNCATE TABLE Prefix").executeUpdate();
     }
 
-    // Search Query - Tab9
+
+    // Search Query
     @SuppressWarnings("unchecked")
     public List<Prefix> findByTitle(String query) {
         if(query == null || query.trim().isEmpty()) {
-            return java.util.Collections.emptyList();
+            return findAll();
         }
 
-        String hql = "FROM Prefix WHERE str(title) LIKE :searchKey";
+        String hql = "FROM Prefix WHERE lower(str(title)) LIKE :searchKey";
 
         return getCurrentSession().createQuery(hql)
                 .setParameter("searchKey", "%" + query.toLowerCase() + "%")

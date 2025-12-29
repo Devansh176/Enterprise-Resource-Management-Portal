@@ -1,5 +1,6 @@
 package prefix.repository;
 
+import lombok.var;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +41,34 @@ public class PrefixRepository {
     }
 
 
-    // Search Query
+    // Search Title Query
     @SuppressWarnings("unchecked")
-    public List<Prefix> findByTitle(String query) {
-        if(query == null || query.trim().isEmpty()) {
-            return findAll();
+    public List<Prefix> findWithFilters(String title, String gender, String prefixName) {
+        StringBuilder hql = new StringBuilder("FROM Prefix WHERE 1=1 ");
+
+        if (title != null && !title.trim().isEmpty()) {
+            hql.append("AND lower(str(title)) LIKE :title ");
+        }
+        if (gender != null && !gender.trim().isEmpty()) {
+            hql.append("AND lower(str(gender)) LIKE :gender ");
+        }
+        if (prefixName != null && !prefixName.trim().isEmpty()) {
+            hql.append("AND lower(str(prefix)) LIKE :prefix ");
         }
 
-        String hql = "FROM Prefix WHERE lower(str(title)) LIKE :searchKey";
+        var query = getCurrentSession().createQuery(hql.toString());
 
-        return getCurrentSession().createQuery(hql)
-                .setParameter("searchKey", "%" + query.toLowerCase() + "%")
-                .list();
+        if (title != null && !title.trim().isEmpty()) {
+            query.setParameter("title", "%" + title.toLowerCase() + "%");
+        }
+        if (gender != null && !gender.trim().isEmpty()) {
+            query.setParameter("gender", "%" + gender.toLowerCase() + "%");
+        }
+        if (prefixName != null && !prefixName.trim().isEmpty()) {
+            query.setParameter("prefix", "%" + prefixName.toLowerCase() + "%");
+        }
+
+        return query.list();
     }
+
 }

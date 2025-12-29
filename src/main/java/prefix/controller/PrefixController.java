@@ -35,8 +35,13 @@ public class PrefixController {
 
     @GetMapping("/api/search")
     @ResponseBody
-    public List<Prefix> search(@RequestParam(name = "q", defaultValue = "") String query) throws InterruptedException {
-        if(query == null || query.isEmpty()) {
+    public List<Prefix> search(
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "gender", required = false) String gender,
+            @RequestParam(name = "prefix", required = false) String prefix,
+            @RequestParam(name = "q", required = false) String q
+    ) throws InterruptedException {
+        if(title == null && q != null) {
             Thread.sleep(500);
             return prefixService.getAllPrefixes();
         }
@@ -48,6 +53,6 @@ public class PrefixController {
             e.printStackTrace();
         }
 
-        return prefixService.searchTitle(query);
+        return prefixService.searchWithFilters(title, gender, prefix);
     }
 }

@@ -18,14 +18,22 @@ window.initTab4 = function() {
             autoLoad: true
         });
 
+        // Reads ALL 3 inputs to create a combined filter
+        var searchTask = new Ext.util.DelayedTask(function() {
+            var tVal = document.getElementById('tab4TitleSearch') ? document.getElementById('tab4TitleSearch').value : '';
+            var gVal = document.getElementById('tab4GenderSearch') ? document.getElementById('tab4GenderSearch').value : '';
+            var pVal = document.getElementById('tab4PrefixSearch') ? document.getElementById('tab4PrefixSearch').value : '';
 
-        var searchTask = new Ext.util.DelayedTask(function(searchValue) {
-            console.log("Searching Backend for:", searchValue);
+            console.log("Filtering -> Title:", tVal, " Gender:", gVal, " Prefix:", pVal);
+
             prefixStore.load({
-                params: { q: searchValue }
+                params: {
+                    title: tVal,
+                    gender: gVal,
+                    prefix: pVal
+                }
             });
         });
-
 
         var entryForm = Ext.create('Ext.form.Panel', {
             title: 'Prefix Entry',
@@ -40,24 +48,21 @@ window.initTab4 = function() {
                     name: 'title',
                     fieldLabel: 'Title',
                     store: ['MR', 'MRS', 'MS', 'MASTER', 'BABY_BOY', 'BABY_GIRL', 'MX', 'DR', 'PROF'],
-                    editable: false,
-                    emptyText: 'Select...'
+                    editable: false, emptyText: 'Select...'
                 },
                 {
                     xtype: 'combo',
                     name: 'gender',
                     fieldLabel: 'Gender',
                     store: ['MALE', 'FEMALE', 'OTHER'],
-                    editable: false,
-                    emptyText: 'Select...'
+                    editable: false, emptyText: 'Select...'
                 },
                 {
                     xtype: 'combo',
                     name: 'displayPrefix',
                     fieldLabel: 'Prefix',
                     store: ['SO', 'HO', 'FO', 'DO', 'WO', 'MO'],
-                    editable: false,
-                    emptyText: 'Select...'
+                    editable: false, emptyText: 'Select...'
                 },
                 {
                     xtype: 'button',
@@ -66,16 +71,14 @@ window.initTab4 = function() {
                         var form = this.up('form').getForm();
                         if(form.isValid()) {
                             var v = form.getValues();
-
                             PrefixController.savePrefix(v.title, v.gender, v.displayPrefix, {
                                 callback: function() {
                                     Ext.Msg.alert('Success', 'Record Saved!');
                                     form.reset();
-                                    prefixStore.reload(); // Refreshing grid via AJAX
+                                    // Trigger the search task to reload grid (keeps filters active)
+                                    searchTask.delay(100);
                                 },
-                                errorHandler: function(msg) {
-                                    Ext.Msg.alert('Error', 'Java Error: ' + msg);
-                                }
+                                errorHandler: function(msg) { Ext.Msg.alert('Error', msg); }
                             });
                         }
                     }
@@ -86,13 +89,12 @@ window.initTab4 = function() {
                     handler: function() {
                         PrefixController.deleteAll(function() {
                             Ext.Msg.alert('Success', 'All records deleted');
-                            prefixStore.reload(); // Refreshing grid via AJAX
+                            prefixStore.reload();
                         });
                     }
                 }
             ]
         });
-
 
         var listGrid = Ext.create('Ext.grid.Panel', {
             title: 'Prefix List',
@@ -108,14 +110,22 @@ window.initTab4 = function() {
                     dataIndex: 'title',
                     flex: 1,
                     sortable: false,
-                    renderer: function(value) {
-                        if (value && value.displayValue) return value.displayValue;
-                        return value;
-                    }
+                    renderer: function(value) { return (value && value.displayValue) ? value.displayValue : value; }
                 },
-
-                {text: 'Gender', dataIndex: 'gender', flex: 1},
-                {text: 'Prefix Of', dataIndex: 'displayPrefix', flex: 1},
+                {
+                    text: '<input type="text" id="tab4GenderSearch" placeholder="Gender..." ' +
+                          'style="width:90%; padding:2px; color:black;">',
+                    dataIndex: 'gender',
+                    flex: 1,
+                    sortable: false
+                },
+                {
+                    text: '<input type="text" id="tab4PrefixSearch" placeholder="Prefix..." ' +
+                          'style="width:90%; padding:2px; color:black;">',
+                    dataIndex: 'displayPrefix',
+                    flex: 1,
+                    sortable: false
+                },
                 {
                     text: 'Action',
                     xtype: 'actioncolumn',
@@ -124,11 +134,9 @@ window.initTab4 = function() {
                         icon: 'https://cdn-icons-png.flaticon.com/16/1214/1214428.png',
                         tooltip: 'Delete',
                         handler: function(grid, rowIndex) {
-                            var rec = grid.getStore().getAt(rowIndex);
-                            var id = rec.get('id');
-
+                            var id = grid.getStore().getAt(rowIndex).get('id');
                             PrefixController.deletePrefix(id, function() {
-                                prefixStore.reload();
+                                searchTask.delay(100); // Reload keeping filters
                             });
                         }
                     }]
@@ -137,26 +145,22 @@ window.initTab4 = function() {
 
             listeners: {
                 afterrender: function() {
-                    var input = Ext.get('tab4TitleSearch');
-                    if (input) {
-                        input.on('mousedown', function(e) {
-                            e.stopPropagation();
-                        });
+                    // Apply listeners to ALL 3 inputs
+                    var inputs = ['tab4TitleSearch', 'tab4GenderSearch', 'tab4PrefixSearch'];
 
-                        input.on('click', function(e) {
-                            e.stopPropagation();
-                        });
+                    Ext.each(inputs, function(inputId) {
+                        var el = Ext.get(inputId);
+                        if (el) {
+                            // Stop ExtJS from interfering with clicks
+                            el.on('mousedown', function(e) { e.stopPropagation(); });
+                            el.on('click', function(e) { e.stopPropagation(); });
+                            el.on('keydown', function(e) { e.stopPropagation(); });
 
-                        // Detect typing
-                        input.on('keyup', function(e, t) {
-                            var val = t.value;
-                            searchTask.delay(1000, null, null, [val]);
-                        });
-
-                        input.on('keydown', function(e) {
-                            e.stopPropagation();
-                        });
-                    }
+                            el.on('keyup', function(e) {
+                                searchTask.delay(1000); // 1 Second Debounce
+                            });
+                        }
+                    });
                 }
             }
         });

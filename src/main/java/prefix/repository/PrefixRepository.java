@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import prefix.entity.Prefix;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -15,60 +16,56 @@ public class PrefixRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+    private Session getCurrentSession() { return sessionFactory.getCurrentSession(); }
 
-    public void save(Prefix prefix) {
-        getCurrentSession().save(prefix);
-    }
+    public void save(Prefix prefix) { getCurrentSession().save(prefix); }
 
     @SuppressWarnings("unchecked")
-    public List<Prefix> findAll(){
-        return getCurrentSession().createQuery("from Prefix").list();
-    }
+    public List<Prefix> findAll(){ return getCurrentSession().createQuery("from Prefix").list(); }
 
     public void deleteById(int id) {
         Session session = getCurrentSession();
         Prefix prefix = session.get(Prefix.class, id);
-        if(prefix != null) {
-            session.delete(prefix);
-        }
+        if(prefix != null) session.delete(prefix);
     }
 
     public void deleteAll() {
         getCurrentSession().createNativeQuery("TRUNCATE TABLE Prefix").executeUpdate();
     }
 
-
-    // Search Title Query
     @SuppressWarnings("unchecked")
-    public List<Prefix> findWithFilters(String title, String gender, String prefixName) {
+    public List<Prefix> findWithFilters(String title, String name, Date dobFrom, Date dobTo, String gender, String prefixName) {
         StringBuilder hql = new StringBuilder("FROM Prefix WHERE 1=1 ");
 
-        if (title != null && !title.trim().isEmpty()) {
-            hql.append("AND lower(str(title)) LIKE :title ");
+        // Text Filters
+        if (title != null && !title.trim().isEmpty()) hql.append("AND lower(str(title)) LIKE :title ");
+        if (name != null && !name.trim().isEmpty()) hql.append("AND lower(name) LIKE :name ");
+        if (gender != null && !gender.trim().isEmpty()) hql.append("AND lower(str(gender)) LIKE :gender ");
+        if (prefixName != null && !prefixName.trim().isEmpty()) hql.append("AND lower(str(prefix)) LIKE :prefix ");
+
+        // --- DATE RANGE LOGIC ---
+        // If "From" is filled, get dates AFTER it
+        if (dobFrom != null) {
+            hql.append("AND dob >= :dobFrom ");
         }
-        if (gender != null && !gender.trim().isEmpty()) {
-            hql.append("AND lower(str(gender)) LIKE :gender ");
+        // If "To" is filled, get dates BEFORE it
+        if (dobTo != null) {
+            hql.append("AND dob <= :dobTo ");
         }
-        if (prefixName != null && !prefixName.trim().isEmpty()) {
-            hql.append("AND lower(str(prefix)) LIKE :prefix ");
-        }
+        // ------------------------
 
         var query = getCurrentSession().createQuery(hql.toString());
 
-        if (title != null && !title.trim().isEmpty()) {
-            query.setParameter("title", "%" + title.toLowerCase() + "%");
-        }
-        if (gender != null && !gender.trim().isEmpty()) {
-            query.setParameter("gender", "%" + gender.toLowerCase() + "%");
-        }
-        if (prefixName != null && !prefixName.trim().isEmpty()) {
-            query.setParameter("prefix", "%" + prefixName.toLowerCase() + "%");
-        }
+        // Set Parameters
+        if (title != null && !title.trim().isEmpty()) query.setParameter("title", "%" + title.toLowerCase() + "%");
+        if (name != null && !name.trim().isEmpty()) query.setParameter("name", "%" + name.toLowerCase() + "%");
+        if (gender != null && !gender.trim().isEmpty()) query.setParameter("gender", "%" + gender.toLowerCase() + "%");
+        if (prefixName != null && !prefixName.trim().isEmpty()) query.setParameter("prefix", "%" + prefixName.toLowerCase() + "%");
+
+        // Bind Dates
+        if (dobFrom != null) query.setParameter("dobFrom", dobFrom);
+        if (dobTo != null) query.setParameter("dobTo", dobTo);
 
         return query.list();
     }
-
 }

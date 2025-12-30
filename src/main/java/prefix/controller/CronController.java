@@ -1,28 +1,35 @@
 package prefix.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import prefix.service.CronService;
+import org.springframework.web.bind.annotation.*;
+import prefix.service.DynamicSchedulerService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cron")
 public class CronController {
 
     @Autowired
-    private CronService cronService;
+    private DynamicSchedulerService schedulerService;
 
-    @GetMapping("/run-cron-job")
-    public String triggerJob() {
-        cronService.performTask();
-        return "Cron Job Executed Successfully";
+    @PostMapping("/update")
+    public String updateCron(@RequestParam("expression") String expression) {
+        return schedulerService.updateCron(expression);
     }
 
-    @GetMapping("/cron-logs")
-    public List<String> getCronLogs() {
-        return cronService.getLogs();
+    @GetMapping("/current")
+    public String getCurrentCron() {
+        return schedulerService.getCurrentCron();
+    }
+
+    @GetMapping("/logs")
+    public List<Map<String, String>> getLogs() {
+        return schedulerService.getRecentLogs().stream()
+                .map(msg -> Collections.singletonMap("logEntry", msg))
+                .collect(Collectors.toList());
     }
 }

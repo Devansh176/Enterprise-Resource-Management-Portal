@@ -9,6 +9,7 @@ import prefix.entity.prefixType.PrefixTypes;
 import prefix.entity.titleType.TitleType;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -20,6 +21,13 @@ public class Prefix {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "DOB")
+    @Temporal(TemporalType.DATE)
+    private Date dob;
 
     @Column(name = "GENDER")
     @Enumerated(EnumType.STRING)

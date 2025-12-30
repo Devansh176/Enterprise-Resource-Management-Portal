@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import prefix.entity.Prefix;
 import prefix.service.PrefixService;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -15,9 +16,9 @@ public class WebServiceController {
     private PrefixService prefixService;
 
     @PostMapping("/prefixes")
-    public String createPrefix(@RequestParam("title") String title, @RequestParam("gender") String gender, @RequestParam("prefix") String prefixName) {
+    public String createPrefix(@RequestParam("title") String title, @RequestParam("name") String name, @RequestParam("dob") Date dob, @RequestParam("gender") String gender, @RequestParam("prefix") String prefixName) {
         try {
-            prefixService.createPrefix(title, gender, prefixName);
+            prefixService.createPrefix(title, name, dob, gender, prefixName);
             return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";
         }
         catch (Exception e) {

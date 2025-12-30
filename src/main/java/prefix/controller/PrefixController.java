@@ -5,10 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.format.annotation.DateTimeFormat;
 import prefix.entity.Prefix;
 import prefix.service.PrefixService;
 
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -17,14 +18,14 @@ public class PrefixController {
     @Autowired
     private PrefixService prefixService;
 
-    public void savePrefix(String title, String gender, String prefixName) {
-        prefixService.createPrefix(title, gender, prefixName);
+    public void savePrefix(String title, String name, Date dob, String gender, String prefixName) {
+        prefixService.createPrefix(title, name, dob, gender, prefixName);
     }
 
     public List<Prefix> listPrefixes() {
         return prefixService.getAllPrefixes();
-    }
 
+    }
     public void deletePrefix(int id) {
         prefixService.deletePrefixById(id);
     }
@@ -36,23 +37,16 @@ public class PrefixController {
     @GetMapping("/api/search")
     @ResponseBody
     public List<Prefix> search(
-            @RequestParam(name = "title", required = false) String title,
-            @RequestParam(name = "gender", required = false) String gender,
-            @RequestParam(name = "prefix", required = false) String prefix,
-            @RequestParam(name = "q", required = false) String q
-    ) throws InterruptedException {
-        if(title == null && q != null) {
-            Thread.sleep(500);
-            return prefixService.getAllPrefixes();
-        }
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String name,
 
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date dobFrom,
+            @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date dobTo,
 
-        return prefixService.searchWithFilters(title, gender, prefix);
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) String prefix
+    ) {
+        // Pass both dates to service
+        return prefixService.searchWithFilters(title, name, dobFrom, dobTo, gender, prefix);
     }
 }

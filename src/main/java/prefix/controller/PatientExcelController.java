@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import prefix.service.PrefixExcelService;
+import prefix.service.PatientExcelService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class PrefixExcelController {
+public class PatientExcelController {
 
     @Autowired
-    private PrefixExcelService prefixExcelService;
+    private PatientExcelService patientExcelService;
 
     @PostMapping("/uploadPrefixExcel")
     public void uploadExcel(@RequestParam("excelFile") MultipartFile file, HttpServletResponse response) throws IOException {
@@ -27,7 +27,7 @@ public class PrefixExcelController {
         }
         try {
             // Controller converts MultipartFile -> InputStream
-            prefixExcelService.processExcelUpload(file.getInputStream());
+            patientExcelService.processExcelUpload(file.getInputStream());
             response.getWriter().write("{success: true}");
         } catch (Exception e) {
             response.getWriter().write("{success: false, msg: '" + e.getMessage().replace("'", "") + "'}");
@@ -41,6 +41,6 @@ public class PrefixExcelController {
         response.setHeader("Content-Disposition", "attachment; filename=prefix_data.xlsx");
 
         // Controller converts HttpServletResponse -> OutputStream
-        prefixExcelService.generateExcelReport(response.getOutputStream());
+        patientExcelService.generateExcelReport(response.getOutputStream());
     }
 }

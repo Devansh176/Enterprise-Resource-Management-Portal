@@ -23,7 +23,7 @@
         <property name="hibernate.show_sql">true</property>
 
         <!-- Entity -->
-        <mapping class="com.prefix.entity.Prefix"/>
+        <mapping class="com.patient.entity.Prefix"/>
 
     </session-factory>
 </hibernate-configuration>

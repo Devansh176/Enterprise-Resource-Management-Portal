@@ -3,7 +3,7 @@ package prefix.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import prefix.entity.Prefix;
+import prefix.entity.Patient;
 
 import java.io.*;
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.List;
 public class PuppeteerService {
 
     @Autowired
-    private PrefixService prefixService;
+    private PatientService patientService;
 
     @Value("${puppeteer.script.dir}")
     private String scriptDir;
@@ -49,7 +49,7 @@ public class PuppeteerService {
     }
 
     private void createDataHtmlFile(String title, String name, Date dobFrom, Date dobTo, String gender, String prefixName) throws IOException {
-        List<Prefix> list = prefixService.searchWithFilters(title, name, dobFrom, dobTo, gender, prefixName);
+        List<Patient> list = patientService.searchWithFilters(title, name, dobFrom, dobTo, gender, prefixName);
 
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 
@@ -76,11 +76,11 @@ public class PuppeteerService {
                     .append("<th>Name</th>")
                     .append("<th>DOB</th>")
                     .append("<th>Gender</th>")
-                    .append("<th>Prefix</th>")
+                    .append("<th>Patient</th>")
                     .append("</tr></thead>");
             html.append("<tbody>");
 
-            for (Prefix p : list) {
+            for (Patient p : list) {
                 html.append("<tr>");
                 html.append("<td>").append(p.getId()).append("</td>");
                 html.append("<td>").append(p.getTitle() != null ? p.getTitle() : "").append("</td>");

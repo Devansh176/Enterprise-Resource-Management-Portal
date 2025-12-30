@@ -6,8 +6,8 @@
 //import com.itextpdf.text.pdf.PdfWriter;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
-//import prefix.entity.Prefix;
-//import prefix.repository.PrefixRepository;
+//import prefix.entity.Patient;
+//import prefix.repository.PatientRepository;
 //
 //import javax.transaction.Transactional;
 //import java.io.OutputStream;
@@ -18,7 +18,7 @@
 //public class PdfService {
 //
 //    @Autowired
-//    private PrefixRepository prefixRepository;
+//    private PatientRepository prefixRepository;
 //
 //    // REMOVED "static" here
 //    public void generatePdfReport(OutputStream outputStream) {
@@ -30,7 +30,7 @@
 //
 //            // 1. Add Title
 //            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLUE);
-//            Paragraph title = new Paragraph("Prefix Database Report", titleFont);
+//            Paragraph title = new Paragraph("Patient Database Report", titleFont);
 //            title.setAlignment(Element.ALIGN_CENTER);
 //            title.setSpacingAfter(20);
 //            document.add(title);
@@ -44,11 +44,11 @@
 //            addHeader(table, "ID");
 //            addHeader(table, "Title");
 //            addHeader(table, "Gender");
-//            addHeader(table, "Prefix");
+//            addHeader(table, "Patient");
 //
 //            // 4. Add Data
-//            List<Prefix> list = prefixRepository.findAll();
-//            for (Prefix p : list) {
+//            List<Patient> list = prefixRepository.findAll();
+//            for (Patient p : list) {
 //                addCenteredCell(table, String.valueOf(p.getId()));
 //                addCenteredCell(table, p.getTitle() != null ? p.getTitle().getDisplayValue() : "");
 //                addCenteredCell(table, p.getGender() != null ? p.getGender().name() : "");

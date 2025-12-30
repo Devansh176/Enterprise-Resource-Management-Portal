@@ -20,8 +20,8 @@
 
     <mvc:default-servlet-handler />
 
-    <context:component-scan base-package="prefix" />
-    <context:component-scan base-package="prefix.controller" />
+    <context:component-scan base-package="patient" />
+    <context:component-scan base-package="patient.controller" />
 
     <tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -34,7 +34,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="prefix.entity" />
+        <property name="packagesToScan" value="patient.entity" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>

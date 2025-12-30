@@ -5,37 +5,37 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import prefix.entity.Prefix;
+import prefix.entity.Patient;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
-public class PrefixRepository {
+public class PatientRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     private Session getCurrentSession() { return sessionFactory.getCurrentSession(); }
 
-    public void save(Prefix prefix) { getCurrentSession().save(prefix); }
+    public void save(Patient patient) { getCurrentSession().save(patient); }
 
     @SuppressWarnings("unchecked")
-    public List<Prefix> findAll(){ return getCurrentSession().createQuery("from Prefix").list(); }
+    public List<Patient> findAll(){ return getCurrentSession().createQuery("from Patient").list(); }
 
     public void deleteById(int id) {
         Session session = getCurrentSession();
-        Prefix prefix = session.get(Prefix.class, id);
-        if(prefix != null) session.delete(prefix);
+        Patient patient = session.get(Patient.class, id);
+        if(patient != null) session.delete(patient);
     }
 
     public void deleteAll() {
-        getCurrentSession().createNativeQuery("TRUNCATE TABLE Prefix").executeUpdate();
+        getCurrentSession().createNativeQuery("TRUNCATE TABLE Patient").executeUpdate();
     }
 
     @SuppressWarnings("unchecked")
-    public List<Prefix> findWithFilters(String title, String name, Date dobFrom, Date dobTo, String gender, String prefixName) {
-        StringBuilder hql = new StringBuilder("FROM Prefix WHERE 1=1 ");
+    public List<Patient> findWithFilters(String title, String name, Date dobFrom, Date dobTo, String gender, String prefixName) {
+        StringBuilder hql = new StringBuilder("FROM Patient WHERE 1=1 ");
 
         // Text Filters
         if (title != null && !title.trim().isEmpty()) hql.append("AND lower(str(title)) LIKE :title ");

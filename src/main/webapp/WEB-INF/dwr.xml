@@ -7,14 +7,14 @@
         <create creator="spring" javascript="PrefixController">
             <param name="beanName" value="prefixController"/>
         </create>
-        <convert converter="enum" match="prefix.entity.gender.GenderType"/>
-        <!-- convert converter="bean" match="prefix.entity.prefixType.PrefixTypes"/ -->
-        <convert converter="bean" match="prefix.entity.prefixType.PrefixTypes">
+        <convert converter="enum" match="patient.entity.gender.GenderType"/>
+        <!-- convert converter="bean" match="patient.entity.prefixType.PrefixTypes"/ -->
+        <convert converter="bean" match="patient.entity.prefixType.PrefixTypes">
             <param name="exclude" value="class, declaringClass"/>
         </convert>
-        <convert converter="bean" match="prefix.entity.Prefix"/>
+        <convert converter="bean" match="patient.entity.Patient"/>
 
-        <convert converter="bean" match="prefix.entity.titleType.TitleType">
+        <convert converter="bean" match="patient.entity.titleType.TitleType">
             <param name="exclude" value="class, declaringClass"/>
         </convert>
     </allow>

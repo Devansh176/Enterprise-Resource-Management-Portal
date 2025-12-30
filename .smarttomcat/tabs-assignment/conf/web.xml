@@ -353,7 +353,7 @@
   <!-- are in square brackets):                                             -->
   <!--                                                                      -->
   <!--   cgiPathPrefix        The CGI search path will start at             -->
-  <!--                        webAppRootDir + File.separator + this prefix. -->
+  <!--                        webAppRootDir + File.separator + this patient. -->
   <!--                        If not set, then webAppRootDir is used.       -->
   <!--                        Recommended value: WEB-INF/cgi                -->
   <!--                                                                      -->

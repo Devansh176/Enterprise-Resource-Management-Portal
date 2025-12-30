@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prefix.entity.Prefix;
+import prefix.entity.Patient;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -17,10 +17,10 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PrefixExcelService {
+public class PatientExcelService {
 
     @Autowired
-    private PrefixService prefixService;
+    private PatientService patientService;
 
 
     public void processExcelUpload(InputStream inputStream) throws IOException {
@@ -49,7 +49,7 @@ public class PrefixExcelService {
                 }
 
                 if (!title.isEmpty() && !gender.isEmpty() && !prefixName.isEmpty()) {
-                    prefixService.createPrefix(title, name, dob, gender, prefixName);
+                    patientService.createPrefix(title, name, dob, gender, prefixName);
                 }
             }
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class PrefixExcelService {
 
     public void generateExcelReport(OutputStream outputStream) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Prefix Data");
+            Sheet sheet = workbook.createSheet("Patient Data");
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -71,9 +71,9 @@ public class PrefixExcelService {
             header.createCell(2).setCellValue("DOB");
             header.createCell(3).setCellValue("Title");
             header.createCell(4).setCellValue("Gender");
-            header.createCell(5).setCellValue("Prefix");
+            header.createCell(5).setCellValue("Patient");
 
-            List<Prefix> list = prefixService.getAllPrefixes();
+            List<Patient> list = patientService.getAllPrefixes();
             int rowIdx = 1;
             for (var p : list) {
                 Row row = sheet.createRow(rowIdx++);

@@ -3,8 +3,8 @@ package prefix.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import prefix.entity.Prefix;
-import prefix.service.PrefixService;
+import prefix.entity.Patient;
+import prefix.service.PatientService;
 
 import java.util.Date;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class WebServiceController {
 
     @Autowired
-    private PrefixService prefixService;
+    private PatientService patientService;
 
     @PostMapping("/prefixes")
     public String createPrefix(
@@ -24,7 +24,7 @@ public class WebServiceController {
             @RequestParam("gender") String gender,
             @RequestParam("prefix") String prefixName) {
         try {
-            prefixService.createPrefix(title, name, dob, gender, prefixName);
+            patientService.createPrefix(title, name, dob, gender, prefixName);
             return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";
         }
         catch (Exception e) {
@@ -33,14 +33,14 @@ public class WebServiceController {
     }
 
     @GetMapping("/prefixes")
-    public List<Prefix> getPrefixesJson() {
-        return prefixService.getAllPrefixes();
+    public List<Patient> getPrefixesJson() {
+        return patientService.getAllPrefixes();
     }
 
     @DeleteMapping("/prefixes/{id}")
     public String deletePrefix(@PathVariable("id") int id) {
         try {
-            prefixService.deletePrefixById(id);
+            patientService.deletePrefixById(id);
             return "{ \"success\": true, \"message\": \"Record Deleted Successfully\" }";
         }
         catch (Exception e) {

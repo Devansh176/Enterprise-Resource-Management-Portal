@@ -175,7 +175,7 @@ window.initTab4 = function() {
                     renderer: Ext.util.Format.dateRenderer('d-M-Y')
                 },
                 {
-                    text: '<div style="font-weight:bold;">Gender</div><input id="tab4GenderSearch" style="width:90%">',
+                    text: '<div style="font-weight:bold;">Gender</div><input id="tab4GenderSearch" onCha style="width:90%">',
                     dataIndex: 'gender', width: 120, sortable: false
                 },
                 {

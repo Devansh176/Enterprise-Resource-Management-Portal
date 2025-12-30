@@ -5,54 +5,122 @@ window.initTab6 = function() {
     isTab6Loaded = true;
 
     Ext.onReady(function() {
-
-        // --- SECTION 1: CREATE RECORD ---
         var createPanel = Ext.create('Ext.form.Panel', {
             title: '1. Create New Record (POST)',
-            bodyPadding: 10,
-            margin: '0 0 10 0',
-            layout: 'hbox',
-            defaults: { margin: '0 10 0 0', labelWidth: 60 },
+            bodyPadding: 15,
+            margin: '0 0 20 0',
+
+            layout: 'column',
+
+            defaults: {
+                labelAlign: 'top',
+                margin: '0 20 10 0',
+                columnWidth: 0.3
+            },
+
             items: [
-                { xtype: 'textfield', name: 'title', fieldLabel: 'Title', emptyText: 'e.g., MR' },
-                { xtype: 'textfield', name: 'gender', fieldLabel: 'Gender', emptyText: 'e.g., MALE' },
-                { xtype: 'textfield', name: 'prefix', fieldLabel: 'Prefix', emptyText: 'e.g., SO' },
                 {
-                    xtype: 'button',
-                    text: 'Create',
-                    icon: 'https://cdn-icons-png.flaticon.com/16/992/992651.png', // Plus icon
-                    handler: function() {
-                        var form = this.up('form').getForm();
-                        if (form.isValid()) {
-                            // Standard AJAX POST
-                            Ext.Ajax.request({
-                                url: 'api/prefixes',
-                                method: 'POST',
-                                params: form.getValues(),
-                                success: function(response) {
-                                    var json = JSON.parse(response.responseText);
-                                    Ext.Msg.alert('Result', json.message);
+                    xtype: 'combo',
+                    name: 'title',
+                    fieldLabel: 'Title',
+                    store: ['MR', 'MRS', 'MS', 'DR', 'PROF'],
+                    emptyText: 'Select...',
+                    editable: false
+                },
+                {
+                    xtype: 'textfield',
+                    name: 'name',
+                    fieldLabel: 'Full Name',
+                    emptyText: 'Enter Name',
+                    columnWidth: 0.4
+                },
+                {
+                    xtype: 'datefield',
+                    name: 'dob',
+                    fieldLabel: 'Date of Birth',
+                    format: 'Y-m-d',
+                    maxValue: new Date()
+                },
+
+                {
+                    xtype: 'combo',
+                    name: 'gender',
+                    fieldLabel: 'Gender',
+                    store: ['MALE', 'FEMALE', 'OTHER'],
+                    emptyText: 'Select...',
+                    editable: false
+                },
+                {
+                    xtype: 'combo',
+                    name: 'prefix',
+                    fieldLabel: 'Prefix',
+                    store: ['SO', 'HO', 'FO', 'DO', 'WO'],
+                    emptyText: 'Select...',
+                    editable: false
+                },
+                {
+                    xtype: 'container',
+                    columnWidth: 0.3,
+                    layout: { type: 'vbox', align: 'start', pack: 'end' },
+                    items: [
+                        { xtype: 'component', height: 23 },
+                        {
+                            xtype: 'button',
+                            text: 'Create Record',
+                            scale: 'medium',
+                            width: 150,
+                            icon: 'https://cdn-icons-png.flaticon.com/16/992/992651.png',
+                            handler: function() {
+                                var form = this.up('form').getForm();
+                                if (form.isValid()) {
+                                    var values = form.getValues();
+
+                                    var rawDob = form.findField('dob').getValue();
+                                    if(rawDob) {
+                                        values.dob = Ext.Date.format(rawDob, 'Y-m-d');
+                                    }
+
+                                    Ext.Ajax.request({
+                                        url: 'api/prefixes',
+                                        method: 'POST',
+                                        params: values, // Send all 5 fields
+                                        success: function(response) {
+                                            var json = JSON.parse(response.responseText);
+                                            Ext.Msg.alert('Success', json.message);
+                                            form.reset();
+                                        },
+                                        failure: function(response) {
+                                            Ext.Msg.alert('Error', 'Failed to create record.');
+                                        }
+                                    });
                                 }
-                            });
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         });
 
-        // --- SECTION 2: DELETE RECORD ---
+
         var deletePanel = Ext.create('Ext.form.Panel', {
             title: '2. Delete Record (DELETE)',
-            bodyPadding: 10,
-            margin: '0 0 10 0',
+            bodyPadding: 15,
+            margin: '0 0 20 0',
             layout: 'hbox',
-            defaults: { margin: '0 10 0 0', labelWidth: 60 },
             items: [
-                { xtype: 'numberfield', name: 'id', fieldLabel: 'ID', emptyText: 'ID to delete', width: 150 },
+                {
+                    xtype: 'numberfield',
+                    name: 'id',
+                    fieldLabel: 'ID to Delete',
+                    labelWidth: 80,
+                    width: 250,
+                    emptyText: 'Enter ID',
+                    margin: '0 15 0 0'
+                },
                 {
                     xtype: 'button',
-                    text: 'Delete',
-                    icon: 'https://cdn-icons-png.flaticon.com/16/1214/1214428.png', // Trash icon
+                    text: 'Delete Record',
+                    icon: 'https://cdn-icons-png.flaticon.com/16/1214/1214428.png',
                     handler: function() {
                         var idField = this.up('form').down('numberfield');
                         var id = idField.getValue();
@@ -61,12 +129,17 @@ window.initTab6 = function() {
                             return;
                         }
 
-                        Ext.Ajax.request({
-                            url: 'api/prefixes/' + id, // Append ID to URL
-                            method: 'DELETE',
-                            success: function(response) {
-                                var json = JSON.parse(response.responseText);
-                                Ext.Msg.alert('Result', json.message);
+                        Ext.Msg.confirm('Confirm', 'Are you sure you want to delete ID: ' + id + '?', function(btn){
+                            if(btn === 'yes'){
+                                Ext.Ajax.request({
+                                    url: 'api/prefixes/' + id,
+                                    method: 'DELETE',
+                                    success: function(response) {
+                                        var json = JSON.parse(response.responseText);
+                                        Ext.Msg.alert('Result', json.message);
+                                        idField.reset();
+                                    }
+                                });
                             }
                         });
                     }
@@ -74,27 +147,33 @@ window.initTab6 = function() {
             ]
         });
 
-        // --- SECTION 3: LIST ALL ---
         var listPanel = Ext.create('Ext.panel.Panel', {
             title: '3. List All Records (GET)',
-            bodyPadding: 10,
+            bodyPadding: 15,
             layout: 'anchor',
             items: [
                 {
                     xtype: 'button',
-                    text: 'Refresh List',
-                    scale: 'medium',
+                    text: 'Refresh JSON List',
                     margin: '0 0 10 0',
                     handler: function() {
+                        var area = Ext.getCmp('jsonOutput');
+                        area.setValue('Loading...');
+
                         Ext.Ajax.request({
                             url: 'api/prefixes',
                             method: 'GET',
                             success: function(response) {
                                 var text = response.responseText;
-                                Ext.getCmp('jsonOutput').setValue(JSON.stringify(JSON.parse(text), null, 4));
+                                try {
+                                    var json = JSON.parse(text);
+                                    area.setValue(JSON.stringify(json, null, 4));
+                                } catch(e) {
+                                    area.setValue(text);
+                                }
                             },
                             failure: function(response) {
-                                Ext.Msg.alert('Error', 'Failed to fetch data');
+                                area.setValue('Error: ' + response.status + ' ' + response.statusText);
                             }
                         });
                     }
@@ -102,17 +181,16 @@ window.initTab6 = function() {
                 {
                     xtype: 'textareafield',
                     id: 'jsonOutput',
-                    fieldLabel: 'JSON Response',
-                    labelAlign: 'top',
                     anchor: '100%',
-                    height: 250,
+                    height: 300,
                     readOnly: true,
-                    fieldStyle: 'background-color: black; color: white; font-family: monospace; border: none;'
+                    fieldStyle: 'background-color: #222; color: #0f0; font-family: monospace; border: 1px solid #ccc; padding: 10px;',
+                    value: '// Click Refresh to see data...'
                 }
             ]
         });
 
-        // Render everything to the container
+        // Render everything
         Ext.create('Ext.container.Container', {
             renderTo: 'tab6-container',
             width: '100%',

@@ -1,6 +1,7 @@
 package prefix.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import prefix.entity.Prefix;
 import prefix.service.PrefixService;
@@ -16,7 +17,12 @@ public class WebServiceController {
     private PrefixService prefixService;
 
     @PostMapping("/prefixes")
-    public String createPrefix(@RequestParam("title") String title, @RequestParam("name") String name, @RequestParam("dob") Date dob, @RequestParam("gender") String gender, @RequestParam("prefix") String prefixName) {
+    public String createPrefix(
+            @RequestParam("title") String title,
+            @RequestParam("name") String name,
+            @RequestParam("dob") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dob,
+            @RequestParam("gender") String gender,
+            @RequestParam("prefix") String prefixName) {
         try {
             prefixService.createPrefix(title, name, dob, gender, prefixName);
             return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";

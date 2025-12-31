@@ -1,4 +1,16 @@
 function showTab(tabId) {
+    var tabs = document.querySelectorAll('.tabs .tab');
+
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+    }
+
+    var tabIndex = parseInt(tabId.replace('tab', '')) - 1;
+
+    if (tabs[tabIndex]) {
+        tabs[tabIndex].classList.add('active');
+    }
+
     // Hide all contents
     var contents = document.querySelectorAll('.content');
     for(var i=0; i<contents.length; i++) {
@@ -40,3 +52,7 @@ function showTab(tabId) {
         }
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+   showTab('tab1');
+});

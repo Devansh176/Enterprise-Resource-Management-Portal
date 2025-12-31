@@ -1,12 +1,12 @@
-package prefix.entity;
+package patient.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import prefix.entity.gender.GenderType;
-import prefix.entity.prefixType.PrefixTypes;
-import prefix.entity.titleType.TitleType;
+import patient.entity.gender.GenderType;
+import patient.entity.prefixType.PrefixTypes;
+import patient.entity.titleType.TitleType;
 
 import javax.persistence.*;
 import java.util.Date;

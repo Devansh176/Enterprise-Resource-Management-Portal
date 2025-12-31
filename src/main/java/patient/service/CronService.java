@@ -1,4 +1,4 @@
-package prefix.service;
+package patient.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package prefix.config;
+package patient.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

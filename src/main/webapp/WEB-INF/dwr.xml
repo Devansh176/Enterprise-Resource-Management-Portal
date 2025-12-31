@@ -4,14 +4,12 @@
 
 <dwr>
     <allow>
-        <create creator="spring" javascript="PrefixController">
-            <param name="beanName" value="prefixController"/>
+        <create creator="spring" javascript="PatientController">
+            <param name="beanName" value="patientController"/>
         </create>
         <convert converter="enum" match="patient.entity.gender.GenderType"/>
         <!-- convert converter="bean" match="patient.entity.prefixType.PrefixTypes"/ -->
-        <convert converter="bean" match="patient.entity.prefixType.PrefixTypes">
-            <param name="exclude" value="class, declaringClass"/>
-        </convert>
+        <convert converter="enum" match="patient.entity.prefixType.PrefixTypes"/>
         <convert converter="bean" match="patient.entity.Patient"/>
 
         <convert converter="bean" match="patient.entity.titleType.TitleType">

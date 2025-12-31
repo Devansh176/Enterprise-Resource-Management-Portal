@@ -1,4 +1,4 @@
-package prefix.controller;
+package patient.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import prefix.service.PatientExcelService;
+import patient.service.PatientExcelService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

@@ -1,8 +1,8 @@
-package prefix.controller;
+package patient.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import prefix.service.DynamicSchedulerService;
+import patient.service.DynamicSchedulerService;
 
 import java.util.Collections;
 import java.util.List;

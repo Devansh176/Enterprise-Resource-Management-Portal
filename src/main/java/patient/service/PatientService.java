@@ -1,12 +1,12 @@
-package prefix.service;
+package patient.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prefix.entity.Patient;
-import prefix.entity.gender.GenderType;
-import prefix.entity.prefixType.PrefixTypes;
-import prefix.entity.titleType.TitleType;
-import prefix.repository.PatientRepository;
+import patient.entity.Patient;
+import patient.entity.gender.GenderType;
+import patient.entity.prefixType.PrefixTypes;
+import patient.entity.titleType.TitleType;
+import patient.repository.PatientRepository;
 
 import javax.transaction.Transactional;
 import java.util.Date;

@@ -1,10 +1,10 @@
-package prefix.controller;
+package patient.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import prefix.entity.Patient;
-import prefix.service.PatientService;
+import patient.entity.Patient;
+import patient.service.PatientService;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +22,7 @@ public class WebServiceController {
             @RequestParam("name") String name,
             @RequestParam("dob") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dob,
             @RequestParam("gender") String gender,
-            @RequestParam("prefix") String prefixName) {
+            @RequestParam("patient") String prefixName) {
         try {
             patientService.createPrefix(title, name, dob, gender, prefixName);
             return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";

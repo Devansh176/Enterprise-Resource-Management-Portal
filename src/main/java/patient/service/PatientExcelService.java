@@ -1,11 +1,11 @@
-package prefix.service;
+package patient.service;
 
 import lombok.var;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prefix.entity.Patient;
+import patient.entity.Patient;
 
 import javax.transaction.Transactional;
 import java.io.IOException;

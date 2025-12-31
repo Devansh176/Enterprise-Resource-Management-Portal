@@ -1,4 +1,4 @@
-package prefix.service;
+package patient.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

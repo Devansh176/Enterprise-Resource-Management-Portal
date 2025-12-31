@@ -1,4 +1,4 @@
-package prefix.entity.titleType;
+package patient.entity.titleType;
 
 import lombok.Getter;
 

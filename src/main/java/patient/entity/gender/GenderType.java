@@ -1,4 +1,4 @@
-package prefix.entity.gender;
+package patient.entity.gender;
 
 public enum GenderType {
     MALE,

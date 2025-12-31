@@ -1,4 +1,4 @@
-package prefix.entity.prefixType;
+package patient.entity.prefixType;
 
 import lombok.Getter;
 

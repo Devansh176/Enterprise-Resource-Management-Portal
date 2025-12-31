@@ -1,4 +1,4 @@
-package prefix.controller;
+package patient.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.format.annotation.DateTimeFormat;
-import prefix.entity.Patient;
-import prefix.service.PatientService;
+import patient.entity.Patient;
+import patient.service.PatientService;
 
 import java.util.Date;
 import java.util.List;
@@ -18,15 +18,15 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    public void savePrefix(String title, String name, Date dob, String gender, String prefixName) {
+    public void savePatient(String title, String name, Date dob, String gender, String prefixName) {
         patientService.createPrefix(title, name, dob, gender, prefixName);
     }
 
-    public List<Patient> listPrefixes() {
+    public List<Patient> listPatients() {
         return patientService.getAllPrefixes();
 
     }
-    public void deletePrefix(int id) {
+    public void deletePatient(int id) {
         patientService.deletePrefixById(id);
     }
 

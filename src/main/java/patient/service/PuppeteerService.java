@@ -1,9 +1,9 @@
-package prefix.service;
+package patient.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import prefix.entity.Patient;
+import patient.entity.Patient;
 
 import java.io.*;
 import java.util.Date;

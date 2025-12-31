@@ -1,11 +1,11 @@
-package prefix.repository;
+package patient.repository;
 
 import lombok.var;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import prefix.entity.Patient;
+import patient.entity.Patient;
 
 import java.util.Date;
 import java.util.List;
@@ -57,7 +57,7 @@ public class PatientRepository {
         if (title != null && !title.trim().isEmpty()) query.setParameter("title", "%" + title.toLowerCase() + "%");
         if (name != null && !name.trim().isEmpty()) query.setParameter("name", "%" + name.toLowerCase() + "%");
         if (gender != null && !gender.trim().isEmpty()) query.setParameter("gender", "%" + gender.toLowerCase() + "%");
-        if (prefixName != null && !prefixName.trim().isEmpty()) query.setParameter("prefix", "%" + prefixName.toLowerCase() + "%");
+        if (prefixName != null && !prefixName.trim().isEmpty()) query.setParameter("patient", "%" + prefixName.toLowerCase() + "%");
 
         // Bind Dates
         if (dobFrom != null) query.setParameter("dobFrom", dobFrom);

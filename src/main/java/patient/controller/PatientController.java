@@ -23,11 +23,11 @@ public class PatientController {
     }
 
     public List<Patient> listPatients() {
-        return patientService.getAllPrefixes();
+        return patientService.getAllPatients();
 
     }
     public void deletePatient(int id) {
-        patientService.deletePrefixById(id);
+        patientService.deletePatientById(id);
     }
 
     public void deleteAll() {

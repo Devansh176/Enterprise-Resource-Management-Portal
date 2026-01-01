@@ -35,10 +35,10 @@ public class PatientService {
         return patientRepository.findWithFilters(title, name, dobFrom, dobTo, gender, prefix);
     }
 
-    public List<Patient> getAllPrefixes() {
+    public List<Patient> getAllPatients() {
         return patientRepository.findAll();
     }
-    public void deletePrefixById(int id) {
+    public void deletePatientById(int id) {
         patientRepository.deleteById(id);
     }
     public void deleteAll() {

@@ -73,7 +73,7 @@ public class PatientExcelService {
             header.createCell(4).setCellValue("Gender");
             header.createCell(5).setCellValue("Patient");
 
-            List<Patient> list = patientService.getAllPrefixes();
+            List<Patient> list = patientService.getAllPatients();
             int rowIdx = 1;
             for (var p : list) {
                 Row row = sheet.createRow(rowIdx++);

@@ -16,13 +16,13 @@ public class WebServiceController {
     @Autowired
     private PatientService patientService;
 
-    @PostMapping("/prefixes")
-    public String createPrefix(
+    @PostMapping("/patient")
+    public String createPatient (
             @RequestParam("title") String title,
             @RequestParam("name") String name,
             @RequestParam("dob") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dob,
             @RequestParam("gender") String gender,
-            @RequestParam("patient") String prefixName) {
+            @RequestParam("prefix") String prefixName) {
         try {
             patientService.createPrefix(title, name, dob, gender, prefixName);
             return "{ \"success\": true, \"message\": \"Record Created Successfully\" }";
@@ -32,15 +32,15 @@ public class WebServiceController {
         }
     }
 
-    @GetMapping("/prefixes")
-    public List<Patient> getPrefixesJson() {
-        return patientService.getAllPrefixes();
+    @GetMapping("/patients")
+    public List<Patient> getPatientsJson() {
+        return patientService.getAllPatients();
     }
 
-    @DeleteMapping("/prefixes/{id}")
+    @DeleteMapping("/patient/{id}")
     public String deletePrefix(@PathVariable("id") int id) {
         try {
-            patientService.deletePrefixById(id);
+            patientService.deletePatientById(id);
             return "{ \"success\": true, \"message\": \"Record Deleted Successfully\" }";
         }
         catch (Exception e) {

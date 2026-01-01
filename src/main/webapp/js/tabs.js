@@ -49,6 +49,10 @@ function showTab(tabId) {
         loadTabContent(selectedTab, 'jsp/tab7.jsp');
     }
 
+    if(tabId === 'tab8') {
+        loadTabContent(selectedTab, 'jsp/tab8.jsp');
+    }
+
 //    // Tab 3 Specific Initialization
 //    if (tabId === 'tab3' && typeof window.initTab3 === 'function') {
 //        window.initTab3();

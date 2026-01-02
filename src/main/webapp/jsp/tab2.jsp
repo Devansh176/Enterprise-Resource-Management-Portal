@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tab 6: Patient Details Popup</title>
+    <title>Tab 2: Patient Details Popup</title>
 
     <style>
         body {
@@ -48,7 +48,7 @@
 <body>
     <div class="tab-container">
         <div class="tab-title">
-            Tab 6 : Patient Details
+            Tab 2 : Patient Details
         </div>
 
         <div>
